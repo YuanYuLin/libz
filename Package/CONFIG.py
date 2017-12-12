@@ -46,6 +46,12 @@ def MAIN_EXTRACT(args):
     ops.ln(dst_lib_dir, "libz.so.1.2.8", "libz.so.1.2")
     ops.ln(dst_lib_dir, "libz.so.1.2.8", "libz.so.1")
     ops.ln(dst_lib_dir, "libz.so.1.2.8", "libz.so")
+
+    ops.copyto(ops.path_join(src_lib_dir, "libbz2.so.1.0.4"), dst_lib_dir)
+    ops.ln(dst_lib_dir, "libbz2.so.1.0.4", "libbz2.so.1.0")
+    ops.ln(dst_lib_dir, "libbz2.so.1.0.4", "libbz2.so.1")
+    ops.ln(dst_lib_dir, "libbz2.so.1.0.4", "libbz2.so")
+
     return True
 
 def MAIN_PATCH(args, patch_group_name):
