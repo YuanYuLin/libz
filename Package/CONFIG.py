@@ -7,6 +7,7 @@ arch = ""
 src_lib_dir = ""
 dst_lib_dir = ""
 src_include_dir = ""
+tmp_include_dir = ""
 dst_include_dir = ""
 
 def set_global(args):
@@ -16,6 +17,7 @@ def set_global(args):
     global src_lib_dir
     global dst_lib_dir
     global src_include_dir
+    global tmp_include_dir
     global dst_include_dir
     pkg_path = args["pkg_path"]
     output_dir = args["output_path"]
@@ -31,6 +33,7 @@ def set_global(args):
     dst_lib_dir = ops.path_join(output_dir, "lib")
 
     src_include_dir = iopc.getBaseRootFile("usr/include")
+    tmp_include_dir = ops.path_join(output_dir, ops.path_join("include",args["pkg_name"]))
     dst_include_dir = ops.path_join("include",args["pkg_name"])
 
 
@@ -52,6 +55,9 @@ def MAIN_EXTRACT(args):
     ops.ln(dst_lib_dir, "libbz2.so.1.0.4", "libbz2.so.1")
     ops.ln(dst_lib_dir, "libbz2.so.1.0.4", "libbz2.so")
 
+    ops.mkdir(tmp_include_dir)
+    ops.copyto(ops.path_join(src_include_dir, 'zconf.h'), tmp_include_dir)
+    ops.copyto(ops.path_join(src_include_dir, 'zlib.h'), tmp_include_dir)
     return True
 
 def MAIN_PATCH(args, patch_group_name):
@@ -75,8 +81,7 @@ def MAIN_BUILD(args):
 def MAIN_INSTALL(args):
     set_global(args)
 
-    iopc.installBin(args["pkg_name"], ops.path_join(src_include_dir, "zconf.h"), dst_include_dir)
-    iopc.installBin(args["pkg_name"], ops.path_join(src_include_dir, "zlib.h"), dst_include_dir)
+    iopc.installBin(args["pkg_name"], ops.path_join(tmp_include_dir, "."), dst_include_dir)
     iopc.installBin(args["pkg_name"], ops.path_join(dst_lib_dir, "."), "lib") 
     return False
 
