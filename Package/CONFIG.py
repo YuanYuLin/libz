@@ -44,19 +44,25 @@ def MAIN_ENV(args):
 def MAIN_EXTRACT(args):
     set_global(args)
 
-    ops.mkdir(dst_lib_dir)
-    ops.copyto(ops.path_join(src_lib_dir, "libz.so.1.2.8"), dst_lib_dir)
-    ops.ln(dst_lib_dir, "libz.so.1.2.8", "libz.so.1.2")
-    ops.ln(dst_lib_dir, "libz.so.1.2.8", "libz.so.1")
-    ops.ln(dst_lib_dir, "libz.so.1.2.8", "libz.so")
+    libz_so = "libz.so.1.2.8"
 
-    ops.copyto(ops.path_join(src_lib_dir, "libbz2.so.1.0.4"), dst_lib_dir)
-    ops.ln(dst_lib_dir, "libbz2.so.1.0.4", "libbz2.so.1.0")
-    ops.ln(dst_lib_dir, "libbz2.so.1.0.4", "libbz2.so.1")
-    ops.ln(dst_lib_dir, "libbz2.so.1.0.4", "libbz2.so")
+    ops.mkdir(dst_lib_dir)
+    ops.copyto(ops.path_join(src_lib_dir, libz_so), dst_lib_dir)
+    ops.ln(dst_lib_dir, libz_so, "libz.so.1.2")
+    ops.ln(dst_lib_dir, libz_so, "libz.so.1")
+    ops.ln(dst_lib_dir, libz_so, "libz.so")
+
+    libbz2_so = "libbz2.so.1.0.4"
+    ops.copyto(ops.path_join(src_lib_dir, libbz2_so), dst_lib_dir)
+    ops.ln(dst_lib_dir, libbz2_so, "libbz2.so.1.0")
+    ops.ln(dst_lib_dir, libbz2_so, "libbz2.so.1")
+    ops.ln(dst_lib_dir, libbz2_so, "libbz2.so")
 
     ops.mkdir(tmp_include_dir)
-    ops.copyto(ops.path_join(src_include_dir, 'zconf.h'), tmp_include_dir)
+    if ops.isExist(ops.path_join(src_include_dir, "arm-linux-gnueabi/zconf.h")):
+        ops.copyto(ops.path_join(src_include_dir, 'arm-linux-gnueabi/zconf.h'), tmp_include_dir)
+    if ops.isExist(ops.path_join(src_include_dir, "x86_64-linux-gnu/zconf.h")):
+        ops.copyto(ops.path_join(src_include_dir, 'x86_64-linux-gnu/zconf.h'), tmp_include_dir)
     ops.copyto(ops.path_join(src_include_dir, 'zlib.h'), tmp_include_dir)
     return True
 
